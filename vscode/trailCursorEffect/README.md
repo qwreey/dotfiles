@@ -1,3 +1,5 @@
+https://www.reddit.com/r/vscode/comments/11e66xh/i_made_neovide_alike_cursor_effect_on_vscode/
+
 # How get this Trail Cursor Effect in VS Code
 
 If you want to add a trail effect to your cursor in VS Code, you can follow these steps:
