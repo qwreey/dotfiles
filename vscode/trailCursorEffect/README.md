@@ -10,7 +10,7 @@ Because of the extension API limit, you can't modify the VS Code DOM with an ext
 
 ## Step 2: Copy the Trail Effect Dotfile
 
-Download the `index.js` file from [my GitHub repo](https://github.com/qwreey75/dotfiles/blob/master/vscode/trailCursorEffect) and copy it to your user folder or any location you prefer. Edit the file to adjust the line height and trail color to your liking.
+Download the `index.js` file from [my GitHub repo](https://github.com/qwreey75/dotfiles/blob/master/vscode/trailCursorEffect/index.js) and copy it to your user folder or any location you prefer. Edit the file to adjust the line height and trail color to your liking.
 
 ```js
 // Line y size. (proportional to x)
@@ -29,7 +29,7 @@ To apply the trail cursor effect, add the following configuration to your VS Cod
 ],
 ```
 
-Replace `/path/to/your/` with the path to your `index.js` file. For best effect, use the block-style cursor instead of the stick-style cursor.
+Replace `/path/to/your/` with the path to your `index.js` file. For best effect, use the block-style cursor instead of the stick-style cursor. (stick style cursor look bad when move up and down)
 ```json
 "editor.cursorStyle": "block",
 "editor.cursorBlinking": "phase",
