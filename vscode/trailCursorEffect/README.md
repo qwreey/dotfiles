@@ -22,19 +22,22 @@ const color = "#A052FF"
 
 To apply the trail cursor effect, add the following configuration to your VS Code `settings.json` file:
 ```json
-    "vscode_custom_css.imports": [
-		"file:///path/to/your/"
-	],
+"vscode_custom_css.imports": [
+	"file:///path/to/your/"
+],
 ```
 
 Replace `/path/to/your/` with the path to your `index.js` file. For best effect, use the block-style cursor instead of the stick-style cursor.
 ```json
-    "editor.cursorStyle": "block",
-    "editor.cursorBlinking": "phase",
-    "editor.cursorSmoothCaretAnimation": "on",
+"editor.cursorStyle": "block",
+"editor.cursorBlinking": "phase",
+"editor.cursorSmoothCaretAnimation": "on",
 ```
+
+Open quick command window (Ctrl Shift P) and type `>Enable Custom CSS and JS` to apply your settings.
 
 ## Step 4: Known Issue
 
-Please note that the trail effect may overlap with the cursor's text, and i'm currently unable to fix this issue. The z-index does not seem to work as expected.
+Please note that the trail effect may overlap with the cursor's text, and I'm currently unable to fix this issue. The z-index does not seem to work as expected.
 
+If you find other bug or fixed some bug, Feel free to make PR!
