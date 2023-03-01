@@ -1,19 +1,16 @@
 // https://www.reddit.com/r/vscode/comments/11e66xh/i_made_neovide_alike_cursor_effect_on_vscode/
-// Line y size. (proportional to x)
-const lineHeight = 2.2
 
 // trail color (pls match it to user cursor color)
 const color = "#A052FF"
-
 
 // imported from https://github.com/tholman/cursor-effects/blob/master/src/rainbowCursor.js
 function rainbowCursor(options) {
   let canvas = options?.canvas
   let cursor = { x: 0, y: 0 }
   let particles = []
-  let context = canvas.getContext("2d")
   let animationFrame
   let width,height
+  let context = canvas.getContext("2d")
 
   function updateSize(x,y) {
     width = x
@@ -22,12 +19,13 @@ function rainbowCursor(options) {
     canvas.height = y
   }
 
-  const lineHeight = options?.lineHeight || 2.2;
-  const totalParticles = options?.length || 20;
+  // const lineHeight = options?.lineHeight || 2.2;
+  const totalParticles = options?.length || 20
   const particlesColor = options.color
-  let size = options?.size || 3;
+  let size = options?.size || 3
+  let sizeY = options?.sizeY || size*2.2
 
-  let cursorsInitted = false;
+  let cursorsInitted = false
 
   function move(x,y) {
     x = x + size/2
@@ -35,68 +33,58 @@ function rainbowCursor(options) {
     cursor.x = x
     cursor.y = y
     if (cursorsInitted === false) {
-      cursorsInitted = true;
+      cursorsInitted = true
       for (let i = 0; i < totalParticles; i++) {
-        addParticle(x, y);
+        addParticle(x, y)
       }
     }
   }
 
   function Particle(x, y) {
-    this.position = { x: x, y: y };
+    this.position = { x: x, y: y }
   }
 
   function addParticle(x, y, image) {
-    particles.push(new Particle(x, y, image));
+    particles.push(new Particle(x, y, image))
   }
 
   function updateParticles() {
-    context.clearRect(0, 0, width, height);
-    context.lineJoin = "round";
+    context.clearRect(0, 0, width, height)
+    let x = cursor.x,y = cursor.y
 
-    let particleSets = [];
+    for (const particleIndex in particles) {
+      const nextParticlePos = (particles[+particleIndex + 1] || particles[0]).position
+      const particlePos = particles[+particleIndex].position
 
-    let x = cursor.x;
-    let y = cursor.y;
-
-    particles.forEach(function (particle, index, particles) {
-      let nextParticle = particles[index + 1] || particles[0];
-
-      particle.position.x = x;
-      particle.position.y = y;
-
-      particleSets.push({ x: x, y: y });
-
-      x += (nextParticle.position.x - particle.position.x) * 0.42;
-      y += (nextParticle.position.y - particle.position.y) * 0.35;
-
-    });
+      particlePos.x = x;
+      particlePos.y = y;
+      
+      x += (nextParticlePos.x - particlePos.x) * 0.42
+      y += (nextParticlePos.y - particlePos.y) * 0.35
+    }
 
     if (x >= cursor.x+2 && x <= cursor.x-2) return
     if (y >= cursor.y+2 && y <= cursor.y-2) return
 
+    context.beginPath()
+    context.lineJoin = "round"
+    context.strokeStyle = particlesColor
+    context.lineWidth = size
+    
+    // draw 3 lines
+    let ymut = (sizeY-size)/3
     for (let yoffset=0;yoffset<=3;yoffset++) {
-      let offset = (yoffset/lineHeight)*size
-      context.beginPath();
-      context.strokeStyle = particlesColor;
-  
-      if (particleSets.length) {
-        context.moveTo(
-          particleSets[0].x,
-          particleSets[0].y + offset
-        );
-      }
-  
-      particleSets.forEach((set, particleIndex) => {
-        if (particleIndex !== 0) {
-          context.lineTo(set.x, set.y + offset);
+      let offset = yoffset*ymut
+      for (const particleIndex in particles) {
+        const pos = particles[particleIndex].position
+        if (particleIndex == 0) {
+          context.moveTo(pos.x, pos.y + offset)
+        } else {
+          context.lineTo(pos.x, pos.y + offset)
         }
-      });
-  
-      context.lineWidth = size;
-      context.lineCap = "butt";
-      context.stroke();
+      }
     }
+    context.stroke()
   }
 
   function loop() {
@@ -108,8 +96,9 @@ function rainbowCursor(options) {
     cancelAnimationFrame(animationFrame);
   }
 
-  function updateCursorSize(newSize) {
+  function updateCursorSize(newSize,newSizeY) {
     size = newSize
+    if (newSizeY) sizeY = newSizeY
   }
 
   return {
@@ -253,7 +242,7 @@ createCursorHandler({
       length: 8,
       color: color,
       size: 7,
-      lineHeight: lineHeight,
+      // lineHeight: lineHeight,
       canvas: cursorCanvas
     })
   },
@@ -275,7 +264,8 @@ createCursorHandler({
 
   // when cursor size changed (emoji, ...)
   onCursorSizeUpdated: (x,y)=>{
-    rainbowCursorHandle.updateCursorSize(parseInt(y/lineHeight))
+    rainbowCursorHandle.updateCursorSize(x,y)
+    // rainbowCursorHandle.updateCursorSize(parseInt(y/lineHeight))
   },
 
   // when using multi cursor... just hide all
