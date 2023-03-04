@@ -3,7 +3,7 @@
 // Configuration
 
 // Set the color of the cursor trail to match the user's cursor color
-const Color = "default" // If set to "default," it will use the theme's cursor color.
+const Color = "#A052FF" // If set to "default," it will use the theme's cursor color.
 // ! default will only working with
 // "workbench.colorCustomizations": {
 //     "editorCursor.background": "#A052FF",
