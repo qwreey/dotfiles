@@ -1,17 +1,37 @@
 // https://www.reddit.com/r/vscode/comments/11e66xh/i_made_neovide_alike_cursor_effect_on_vscode/
+//"#A052FF"
 
-// trail color (pls match it to user cursor color)
-const color = "#A052FF"
+// Configuration
+
+// Set the color of the cursor trail to match the user's cursor color
+const Color = "#A052FF"; // If set to "default," it will use the theme's cursor color.
+
+// Set the style of the cursor to either a line or block
+const CursorStyle = "block"; // Options are 'line' or 'block'
+
+// Set the length of the cursor trail. A higher value may cause lag.
+const TrailLength = 8; // Recommended value is around 8
+
+// Set the polling rate for handling cursor created and destroyed events, in milliseconds.
+const CursorUpdatePollingRate = 500; // Recommended value is around 500
+
+
 
 // imported from https://github.com/tholman/cursor-effects/blob/master/src/rainbowCursor.js
-function rainbowCursor(options) {
-  let canvas = options?.canvas
+function createTrail(options) {
+  const totalParticles = options?.length || 20
+  const particlesColor = options?.color || "#A052FF"
+  const style = options?.style || "block"
+  const canvas = options?.canvas
+  const context = canvas.getContext("2d")
   let cursor = { x: 0, y: 0 }
   let particles = []
-  let animationFrame
   let width,height
-  let context = canvas.getContext("2d")
+  let sizeX = options?.size || 3
+  let sizeY = options?.sizeY || sizeX*2.2
+  let cursorsInitted = false
 
+  // update canvas size
   function updateSize(x,y) {
     width = x
     height = y
@@ -19,17 +39,10 @@ function rainbowCursor(options) {
     canvas.height = y
   }
 
-  // const lineHeight = options?.lineHeight || 2.2;
-  const totalParticles = options?.length || 20
-  const particlesColor = options.color
-  let size = options?.size || 3
-  let sizeY = options?.sizeY || size*2.2
-
-  let cursorsInitted = false
-
+  // update cursor position
   function move(x,y) {
-    x = x + size/2
-    y = y + size/2
+    x = x + sizeX/2
+    y = y + sizeX/2
     cursor.x = x
     cursor.y = y
     if (cursorsInitted === false) {
@@ -40,16 +53,18 @@ function rainbowCursor(options) {
     }
   }
 
-  function Particle(x, y) {
-    this.position = { x: x, y: y }
+  // particle class
+  class Particle {
+    constructor(x, y) {
+      this.position = { x: x, y: y }
+    }
   }
 
   function addParticle(x, y, image) {
     particles.push(new Particle(x, y, image))
   }
 
-  function updateParticles() {
-    context.clearRect(0, 0, width, height)
+  function calculatePosition() {
     let x = cursor.x,y = cursor.y
 
     for (const particleIndex in particles) {
@@ -62,17 +77,17 @@ function rainbowCursor(options) {
       x += (nextParticlePos.x - particlePos.x) * 0.42
       y += (nextParticlePos.y - particlePos.y) * 0.35
     }
+  }
 
-    if (x >= cursor.x+2 && x <= cursor.x-2) return
-    if (y >= cursor.y+2 && y <= cursor.y-2) return
-
+  // for block cursor
+  function drawLines() {
     context.beginPath()
     context.lineJoin = "round"
     context.strokeStyle = particlesColor
-    context.lineWidth = size
-    
+    context.lineWidth = sizeX
+
     // draw 3 lines
-    let ymut = (sizeY-size)/3
+    let ymut = (sizeY-sizeX)/3
     for (let yoffset=0;yoffset<=3;yoffset++) {
       let offset = yoffset*ymut
       for (const particleIndex in particles) {
@@ -87,23 +102,45 @@ function rainbowCursor(options) {
     context.stroke()
   }
 
-  function loop() {
-    updateParticles();
-    animationFrame = requestAnimationFrame(loop);
+  // for line cursor
+  function drawPath() {
+    context.beginPath()
+    context.fillStyle = particlesColor
+
+    // draw path
+    for (let particleIndex=0;particleIndex<totalParticles;particleIndex++) {
+      const pos = particles[+particleIndex].position
+      if (particleIndex == 0) {
+        context.moveTo(pos.x, pos.y-sizeX/2)
+      } else {
+        context.lineTo(pos.x, pos.y-sizeX/2)
+      }
+    }
+    for (let particleIndex=totalParticles-1;particleIndex>=0;particleIndex--) {
+      const pos = particles[+particleIndex].position
+      context.lineTo(pos.x, pos.y+sizeY-sizeX/2)
+    }
+    context.closePath()
+    context.fill()
   }
 
-  function destroy() {
-    cancelAnimationFrame(animationFrame);
+  function updateParticles() {
+    if (!cursorsInitted) return
+
+    context.clearRect(0, 0, width, height)
+    calculatePosition()
+
+    if (style=="line") drawPath()
+    else if (style=="block") drawLines()
   }
 
   function updateCursorSize(newSize,newSizeY) {
-    size = newSize
+    sizeX = newSize
     if (newSizeY) sizeY = newSizeY
   }
 
   return {
-    destroy: destroy,
-    loop: loop,
+    updateParticles: updateParticles,
     move: move,
     updateSize: updateSize,
     updateCursorSize: updateCursorSize
@@ -197,15 +234,15 @@ async function createCursorHandler(handlerFunctions) {
     for (const id in lastObjects) {
       if (now.includes(+id)) continue
       delete lastObjects[+id]
-      // let target = lastObjects[+id]
       // console.log("DEBUG-CursorRemoved",+id)
     }
-  },1000)
+  },handlerFunctions?.cursorUpdatePollingRate || 500)
 
   // read cursor position polling
   function updateLoop() {
     let {left:editorX,top:editorY} = editor.getBoundingClientRect()
     for (handler of updateHandlers) handler(editorX,editorY)
+    handlerFunctions?.onLoop()
     requestAnimationFrame(updateLoop)
   }
 
@@ -224,6 +261,9 @@ async function createCursorHandler(handlerFunctions) {
 let cursorCanvas,rainbowCursorHandle
 createCursorHandler({
 
+  // cursor create/destroy event handler polling rate
+  cursorUpdatePollingRate: CursorUpdatePollingRate,
+
   // When editor instance stared
   onStarted: (editor)=>{
     // create new canvas for make animation
@@ -238,11 +278,11 @@ createCursorHandler({
     // create rainbow cursor effect
     // thanks to https://github.com/tholman/cursor-effects/blob/master/src/rainbowCursor.js
     // we can create trail effect!
-    rainbowCursorHandle = rainbowCursor({
-      length: 8,
-      color: color,
+    rainbowCursorHandle = createTrail({
+      length: TrailLength,
+      color: Color,
       size: 7,
-      // lineHeight: lineHeight,
+      cursorStyle: CursorStyle,
       canvas: cursorCanvas
     })
   },
@@ -271,7 +311,11 @@ createCursorHandler({
   // when using multi cursor... just hide all
   onCursorVisibilityChanged: (visibility)=>{
     cursorCanvas.style.visibility = visibility
-  }
+  },
+
+  // update animation
+  onLoop: ()=>{
+    rainbowCursorHandle.updateParticles()
+  },
 
 })
-
