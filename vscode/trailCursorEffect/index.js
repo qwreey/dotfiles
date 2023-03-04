@@ -1,19 +1,18 @@
 // https://www.reddit.com/r/vscode/comments/11e66xh/i_made_neovide_alike_cursor_effect_on_vscode/
-//"#A052FF"
 
 // Configuration
 
 // Set the color of the cursor trail to match the user's cursor color
-const Color = "#A052FF"; // If set to "default," it will use the theme's cursor color.
+const Color = "default" // If set to "default," it will use the theme's cursor color.
 
 // Set the style of the cursor to either a line or block
-const CursorStyle = "block"; // Options are 'line' or 'block'
+const CursorStyle = "block" // Options are 'line' or 'block'
 
 // Set the length of the cursor trail. A higher value may cause lag.
-const TrailLength = 8; // Recommended value is around 8
+const TrailLength = 8 // Recommended value is around 8
 
 // Set the polling rate for handling cursor created and destroyed events, in milliseconds.
-const CursorUpdatePollingRate = 500; // Recommended value is around 500
+const CursorUpdatePollingRate = 500 // Recommended value is around 500
 
 
 
@@ -278,9 +277,17 @@ createCursorHandler({
     // create rainbow cursor effect
     // thanks to https://github.com/tholman/cursor-effects/blob/master/src/rainbowCursor.js
     // we can create trail effect!
+    let color = Color
+    if (color == "default") {
+      color = getComputedStyle(
+        document.querySelector("body>.monaco-workbench"))
+        .getPropertyValue("--vscode-editorCursor-background")
+        .trim()
+    }
+
     rainbowCursorHandle = createTrail({
       length: TrailLength,
-      color: Color,
+      color: color,
       size: 7,
       cursorStyle: CursorStyle,
       canvas: cursorCanvas
