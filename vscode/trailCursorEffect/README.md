@@ -14,7 +14,7 @@ Download the `index.js` file from [my GitHub repo](https://github.com/qwreey75/d
 
 ```js
 // Set the color of the cursor trail to match the user's cursor color
-const Color = "default" // If set to "default," it will use the theme's cursor color.
+const Color = "#A052FF"
 
 // Set the style of the cursor to either a line or block
 const CursorStyle = "block" // Options are 'line' or 'block'
@@ -34,13 +34,7 @@ To apply the trail cursor effect, add the following configuration to your VS Cod
 	"file:///path/to/your/"
 ],
 ```
-
-Replace `/path/to/your/` with the path to your `index.js` file. For best effect, use the block-style cursor instead of the stick-style cursor. (stick style cursor look bad when move up and down)
-```json
-"editor.cursorStyle": "block",
-"editor.cursorBlinking": "phase",
-"editor.cursorSmoothCaretAnimation": "on",
-```
+Replace `/path/to/your/` with the path to your `index.js` file.
 
 Open quick command window (Ctrl Shift P) and type `>Enable Custom CSS and JS` to apply your settings.
 
