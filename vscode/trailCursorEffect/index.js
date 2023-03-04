@@ -6,7 +6,7 @@
 const Color = "default" // If set to "default," it will use the theme's cursor color.
 
 // Set the style of the cursor to either a line or block
-const CursorStyle = "block" // Options are 'line' or 'block'
+const CursorStyle = "line" // Options are 'line' or 'block'
 
 // Set the length of the cursor trail. A higher value may cause lag.
 const TrailLength = 8 // Recommended value is around 8
@@ -41,7 +41,7 @@ function createTrail(options) {
   // update cursor position
   function move(x,y) {
     x = x + sizeX/2
-    y = y + sizeX/2
+    y = y + sizeY/2
     cursor.x = x
     cursor.y = y
     if (cursorsInitted === false) {
@@ -83,7 +83,7 @@ function createTrail(options) {
     context.beginPath()
     context.lineJoin = "round"
     context.strokeStyle = particlesColor
-    context.lineWidth = sizeX
+    context.lineWidth = Math.min(sizeX,sizeY)
 
     // draw 3 lines
     let ymut = (sizeY-sizeX)/3
@@ -121,6 +121,22 @@ function createTrail(options) {
     }
     context.closePath()
     context.fill()
+
+    context.beginPath()
+    context.lineJoin = "round"
+    context.strokeStyle = particlesColor
+    context.lineWidth = Math.min(sizeX,sizeY)
+    // for up&down
+    let offset = -sizeX/2 + sizeY/2
+    for (const particleIndex in particles) {
+      const pos = particles[particleIndex].position
+      if (particleIndex == 0) {
+        context.moveTo(pos.x, pos.y + offset)
+      } else {
+        context.lineTo(pos.x, pos.y + offset)
+      }
+    }
+    context.stroke()
   }
 
   function updateParticles() {
