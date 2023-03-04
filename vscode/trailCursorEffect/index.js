@@ -19,7 +19,7 @@ const CursorUpdatePollingRate = 500 // Recommended value is around 500
 // imported from https://github.com/tholman/cursor-effects/blob/master/src/rainbowCursor.js
 function createTrail(options) {
   const totalParticles = options?.length || 20
-  const particlesColor = options?.color || "#A052FF"
+  let particlesColor = options?.color || "#A052FF"
   const style = options?.style || "block"
   const canvas = options?.canvas
   const context = canvas.getContext("2d")
@@ -163,7 +163,8 @@ async function createCursorHandler(handlerFunctions) {
   let updateHandlers = []
   let cursorId = 0
   let lastObjects = {}
-  
+  let lastCursor = 0
+
   // cursor update handler
   function createCursorUpdateHandler(target,cursorId,cursorHolder,minimap) {
     let lastX,lastY // save last position
@@ -179,7 +180,7 @@ async function createCursorHandler(handlerFunctions) {
       let revX = newX-editorX,revY = newY-editorY
 
       // if have no changes, ignore
-      if (revX == lastX && revY == lastY) return
+      if (revX == lastX && revY == lastY && lastCursor == cursorId) return
       lastX = revX;lastY = revY // update last position
 
       // wrong position
@@ -195,6 +196,7 @@ async function createCursorHandler(handlerFunctions) {
       if (cursorHolder.getBoundingClientRect().left > newX) return
 
       // update corsor position
+      lastCursor = cursorId
       handlerFunctions?.onCursorPositionUpdated(revX,revY)
       handlerFunctions?.onCursorSizeUpdated(target.clientWidth,target.clientHeight)
     }
@@ -257,6 +259,7 @@ async function createCursorHandler(handlerFunctions) {
   handlerFunctions?.onReady()
 }
 
+// Main handler code
 let cursorCanvas,rainbowCursorHandle
 createCursorHandler({
 
@@ -294,10 +297,7 @@ createCursorHandler({
     })
   },
 
-  // ready to draw! let's call requestAnimationFrame
-  onReady: ()=>{
-    rainbowCursorHandle.loop()
-  },
+  onReady:()=>{},
 
   // when cursor moved
   onCursorPositionUpdated: (x,y)=>{
