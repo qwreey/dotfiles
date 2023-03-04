@@ -292,7 +292,7 @@ createCursorHandler({
       length: TrailLength,
       color: color,
       size: 7,
-      cursorStyle: CursorStyle,
+      style: CursorStyle,
       canvas: cursorCanvas
     })
   },
