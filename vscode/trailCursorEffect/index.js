@@ -6,6 +6,8 @@
 const Color = "default" // If set to "default," it will use the theme's cursor color.
 
 // Set the style of the cursor to either a line or block
+// line option use fill() to draw trail, which has performance benefits
+// You can use line option even if you are using a block cursor, it will adjust trail size with your cursor size
 const CursorStyle = "line" // Options are 'line' or 'block'
 
 // Set the length of the cursor trail. A higher value may cause lag.
