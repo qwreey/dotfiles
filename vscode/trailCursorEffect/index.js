@@ -4,6 +4,13 @@
 
 // Set the color of the cursor trail to match the user's cursor color
 const Color = "default" // If set to "default," it will use the theme's cursor color.
+// ! default will only working with
+// "workbench.colorCustomizations": {
+//     "editorCursor.background": "#A052FF",
+// }
+// due to getComputedStyle issue. unfortunately, we can't access vscode's private properties
+// because vscode production has mangling. (All private namespace will changes in next build)
+// So, get theme color without performance hacking is very hard :(
 
 // Set the style of the cursor to either a line or block
 // line option use fill() to draw trail, which has performance benefits
