@@ -50,7 +50,6 @@ function createTrail(options) {
   // update cursor position
   function move(x,y) {
     x = x + sizeX/2
-    y = y + sizeY/2
     cursor.x = x
     cursor.y = y
     if (cursorsInitted === false) {
@@ -92,7 +91,8 @@ function createTrail(options) {
     context.beginPath()
     context.lineJoin = "round"
     context.strokeStyle = particlesColor
-    context.lineWidth = Math.min(sizeX,sizeY)
+    const lineWidth = Math.min(sizeX,sizeY)
+    context.lineWidth = lineWidth
 
     // draw 3 lines
     let ymut = (sizeY-sizeX)/3
@@ -101,9 +101,9 @@ function createTrail(options) {
       for (const particleIndex in particles) {
         const pos = particles[particleIndex].position
         if (particleIndex == 0) {
-          context.moveTo(pos.x, pos.y + offset)
+          context.moveTo(pos.x, pos.y + offset + lineWidth/2)
         } else {
-          context.lineTo(pos.x, pos.y + offset)
+          context.lineTo(pos.x, pos.y + offset + lineWidth/2)
         }
       }
     }
@@ -119,14 +119,14 @@ function createTrail(options) {
     for (let particleIndex=0;particleIndex<totalParticles;particleIndex++) {
       const pos = particles[+particleIndex].position
       if (particleIndex == 0) {
-        context.moveTo(pos.x, pos.y-sizeX/2)
+        context.moveTo(pos.x, pos.y)
       } else {
-        context.lineTo(pos.x, pos.y-sizeX/2)
+        context.lineTo(pos.x, pos.y)
       }
     }
     for (let particleIndex=totalParticles-1;particleIndex>=0;particleIndex--) {
       const pos = particles[+particleIndex].position
-      context.lineTo(pos.x, pos.y+sizeY-sizeX/2)
+      context.lineTo(pos.x, pos.y+sizeY)
     }
     context.closePath()
     context.fill()
