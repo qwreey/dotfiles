@@ -4,18 +4,14 @@
 
 // Set the color of the cursor trail to match the user's cursor color
 const Color = "#A052FF" // If set to "default," it will use the theme's cursor color.
-// ! default will only working with
+// ! default will only reference editorCursor.background
 // "workbench.colorCustomizations": {
 //     "editorCursor.background": "#A052FF",
 // }
-// due to getComputedStyle issue. unfortunately, we can't access vscode's private properties
-// because vscode production has mangling. (All private namespace will changes in next build)
-// So, get theme color without performance hacking is very hard :(
 
 // Set the style of the cursor to either a line or block
-// line option use fill() to draw trail, which has performance benefits
-// You can use line option even if you are using a block cursor, it will adjust trail size with your cursor size
-const CursorStyle = "line" // Options are 'line' or 'block'
+// line option use fill() to draw trail, block option use lineTo to draw trail
+const CursorStyle = "block" // Options are 'line' or 'block'
 
 // Set the length of the cursor trail. A higher value may cause lag.
 const TrailLength = 8 // Recommended value is around 8
@@ -95,7 +91,7 @@ function createTrail(options) {
     context.lineWidth = lineWidth
 
     // draw 3 lines
-    let ymut = (sizeY-sizeX)/3
+    let ymut = (sizeY-lineWidth)/3
     for (let yoffset=0;yoffset<=3;yoffset++) {
       let offset = yoffset*ymut
       for (const particleIndex in particles) {
