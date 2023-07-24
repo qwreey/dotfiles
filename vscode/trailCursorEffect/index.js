@@ -211,7 +211,7 @@ async function createCursorHandler(handlerFunctions) {
       if (target.style.visibility != "inherit") return
 
       // if moved over minimap, ignore
-      if (minimap && minimap.getBoundingClientRect().left <= newX) return
+      if (minimap && minimap.offsetWidth != 0 && minimap.getBoundingClientRect().left <= newX) return
 
       // if cursor is not displayed on screen, ignore
       if (cursorHolder.getBoundingClientRect().left > newX) return
