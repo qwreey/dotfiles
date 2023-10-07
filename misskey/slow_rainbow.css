@@ -1,0 +1,11 @@
+@keyframes mfm-rainbow-slow {
+    0% {
+        filter: hue-rotate(0deg) contrast(80%) saturate(85%) brightness(120%);
+    }
+    100% {
+        filter: hue-rotate(360deg) contrast(80%) saturate(85%) brightness(120%);
+    }
+}
+[style*="mfm-rainbow"] {
+    animation: 7s linear 0s infinite normal none running mfm-rainbow-slow !important;
+}

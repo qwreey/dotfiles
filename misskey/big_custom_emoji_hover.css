@@ -1,0 +1,3 @@
+:not([href])>span>img[alt^=":"]:hover {
+    transform: scale(2.3);
+}

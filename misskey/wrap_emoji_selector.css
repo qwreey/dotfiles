@@ -1,0 +1,17 @@
+.emojis .body {
+    display: flex !important;
+    flex-wrap: wrap;
+}
+.emojis .body .item {
+    width: auto !important;
+    contain: unset !important;
+    aspect-ratio: unset !important;
+    margin: 0 2px;
+}
+.emojis .body .item:hover {
+    outline: 2px rgba(255,255,255,0.9) solid;
+    box-shadow: 0 2px 8px 0px rgba(0,0,0,0.8);
+}
+.post-form input+div+div {
+    max-width: none !important;
+}

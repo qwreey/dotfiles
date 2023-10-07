@@ -1,0 +1,129 @@
+/* 모든것을 고양이로! */
+:not(button)>span:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))>:nth-child(1), /* 팝업 또는 창 안 */
+a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(2)))>:nth-child(1),
+header>div>a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))>:nth-child(1) {
+  overflow: visible;
+}
+:not(button)>span:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))>:nth-child(1)>img, /* 팝업 또는 창 안 */
+a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(2)))>:nth-child(1)>img,
+header>div>a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))>:nth-child(1)>img {
+  border-radius: 100%;
+}
+/* 왼쪽귀 움직임 */
+@keyframes cat-hover-left{
+  0% {
+    transform: rotate(37.6deg) skew(30deg);
+  }
+  25% {
+    transform: rotate(10deg) skew(30deg);
+  }
+  50% {
+    transform: rotate(20deg) skew(30deg);
+  }
+  75% {
+    transform: rotate(0) skew(30deg);
+  }
+  100% {
+    transform: rotate(37.6deg) skew(30deg);
+  }
+}
+/* 왼쪽귀 추가 */
+:not(button)>span:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))::before, /* 팝업 또는 창 안 */
+a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(2)))::before, /* 화면상 */
+header>div>a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))::before /* 포스트 안에 */ {
+  content: "";
+  position: absolute;
+  height: 50%;
+  width: 50%;
+  top: 0%;
+  left: 0%;
+  /* imported from misskey css */
+  transform: rotate(37.5deg) skew(30deg);
+  border-radius: 25% 75% 75%;
+  background: currentcolor;
+/*   background: radial-gradient(circle at center, #df548f 45%, transparent 48%), currentcolor; */
+}
+:not(button)>span:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3))):hover::before, /* 팝업 또는 창 안 */
+a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(2))):hover::before, /* 화면상 */
+header>div>a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3))):hover::before /* 포스트 안에 */ {
+  animation: cat-hover-left 1s infinite;
+}
+/* 왼쪽 안쪽귀 추가 */
+:not(button)>span:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))>:nth-child(1)::before, /* 팝업 또는 창 안 */
+a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(2)))>:nth-child(1)::before, /* 화면상 */
+header>div>a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))>:nth-child(1)::before /* 포스트 안에 */ {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  height: 30%;
+  width: 30%;
+  top: 9.3%;
+  left: 10.25%;/* imported from misskey css */
+  transform: rotate(37.5deg) skew(30deg);
+  border-radius: 25% 75% 75%;
+  background: #df548f;
+}
+:not(button)>span:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3))):hover>:nth-child(1)::before, /* 팝업 또는 창 안 */
+a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(2))):hover>:nth-child(1)::before, /* 화면상 */
+header>div>a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3))):hover>:nth-child(1)::before /* 포스트 안에 */ {
+  animation: cat-hover-left 1s infinite;
+}
+/* 오른쪽귀 움직임 */
+@keyframes cat-hover-right{
+  0% {
+    transform: rotate(-37.6deg) skew(-30deg);
+  }
+  30% {
+    transform: rotate(-10deg) skew(-30deg);
+  }
+  55% {
+    transform: rotate(-20deg) skew(-30deg);
+  }
+  75% {
+    transform: rotate(0) skew(-30deg);
+  }
+  100% {
+    transform: rotate(-37.6deg) skew(-30deg);
+  }
+}
+/* 오른쪽귀 추가 */
+:not(button)>span:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))::after, /* 팝업 또는 창 안 */
+a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(2)))::after, /* 화면상 */
+header>div>a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))::after /* 포스트 안에 */ {
+  content: "";
+  position: absolute;
+  height: 50%;
+  width: 50%;
+  top: 0%;
+  left: 50%;
+
+  /* imported from misskey css */
+  transform: rotate(-37.5deg) skew(-30deg);
+  border-radius: 75% 25% 75% 75%;
+  background: currentcolor;
+}
+:not(button)>span:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3))):hover::after, /* 팝업 또는 창 안 */
+a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(2))):hover::after, /* 화면상 */
+header>div>a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3))):hover::after /* 포스트 안에 */ {
+  animation: cat-hover-right 1s infinite;
+}
+/* 오른쪽 안쪽귀 추가 */
+:not(button)>span:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))>:nth-child(1)::after, /* 팝업 또는 창 안 */
+a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(2)))>:nth-child(1)::after, /* 화면상 */
+header>div>a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3)))>:nth-child(1)::after { /* 포스트 안에 */
+  content: "";
+  position: absolute;
+  z-index: -1;
+  height: 30%;
+  width: 30%;
+  top: 9.3%;
+  left: 60.22%;/* imported from misskey css */
+  transform: rotate(-37.5deg) skew(-30deg);
+  border-radius: 75% 25% 75% 75%;
+  background: #df548f;
+}
+:not(button)>span:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3))):hover>:nth-child(1)::after, /* 팝업 또는 창 안 */
+a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(2))):hover>:nth-child(1)::after, /* 화면상 */
+header>div>a:has(>div>[src*="/proxy/avatar"],>div>[src*="/identicon/"]):not(:has(>:nth-child(3))):hover>:nth-child(1)::after {
+  animation: cat-hover-right 1s infinite;
+}

@@ -1,0 +1,6 @@
+.xBp91 {
+    transform: scale(2.5);
+}
+.ti-eye-exclamation {
+    filter: brightness(0) saturate(100%) invert(13%) sepia(100%) saturate(7496%) hue-rotate(359deg) brightness(95%) contrast(111%); 
+}
