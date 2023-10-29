@@ -164,10 +164,6 @@
 	}
 }
 
-.selected-text {
-	background-color: rgba(219, 187, 255, 0.31);
-}
-
 .selectionHighlight {
 	animation: custom_fadein 0.12s;
 }
