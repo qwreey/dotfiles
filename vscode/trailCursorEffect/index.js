@@ -19,6 +19,10 @@ const TrailLength = 8 // Recommended value is around 8
 // Set the polling rate for handling cursor created and destroyed events, in milliseconds.
 const CursorUpdatePollingRate = 500 // Recommended value is around 500
 
+// Use shadow
+const UseShadow = false
+const ShadowColor = Color
+const ShadowBlur = 15
 
 
 // imported from https://github.com/tholman/cursor-effects/blob/master/src/rainbowCursor.js
@@ -90,6 +94,11 @@ function createTrail(options) {
     const lineWidth = Math.min(sizeX,sizeY)
     context.lineWidth = lineWidth
 
+    if (UseShadow) {
+      context.shadowColor = ShadowColor;
+      context.shadowBlur = ShadowBlur;
+    }
+
     // draw 3 lines
     let ymut = (sizeY-lineWidth)/3
     for (let yoffset=0;yoffset<=3;yoffset++) {
@@ -110,6 +119,10 @@ function createTrail(options) {
   function drawPath() {
     context.beginPath()
     context.fillStyle = particlesColor
+    if (UseShadow) {
+      context.shadowColor = ShadowColor;
+      context.shadowBlur = ShadowBlur;
+    }
 
     // draw path
     for (let particleIndex=0;particleIndex<totalParticles;particleIndex++) {
@@ -246,7 +259,7 @@ async function createCursorHandler(handlerFunctions) {
     }
     
     // update visible
-    let visibility = count<=1 ? "visible" : "hidden"
+    let visibility = count<=0 ? "visible" : "hidden"
     if (visibility != lastVisibility) {
       handlerFunctions?.onCursorVisibilityChanged(visibility)
       lastVisibility = visibility
