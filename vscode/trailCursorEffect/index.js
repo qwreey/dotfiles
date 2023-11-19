@@ -221,7 +221,7 @@ async function createCursorHandler(handlerFunctions) {
       if (revX<=0 || revY<=0) return
 
       // if it is invisible, ignore
-      if (target.style.visibility != "inherit") return
+      if (target.style.visibility == "hidden") return
 
       // if moved over minimap, ignore
       if (minimap && minimap.offsetWidth != 0 && minimap.getBoundingClientRect().left <= newX) return
@@ -243,7 +243,7 @@ async function createCursorHandler(handlerFunctions) {
     let now = [],count = 0
     // created
     for (const target of editor.getElementsByClassName("cursor")) {
-      if (target.style.visibility != "inherit") count++
+      if (target.style.visibility != "hidden") count++
       if (target.hasAttribute("cursorId")) {
         now.push(+target.getAttribute("cursorId"))
         continue
@@ -259,7 +259,7 @@ async function createCursorHandler(handlerFunctions) {
     }
     
     // update visible
-    let visibility = count<=0 ? "visible" : "hidden"
+    let visibility = count<=1 ? "visible" : "hidden"
     if (visibility != lastVisibility) {
       handlerFunctions?.onCursorVisibilityChanged(visibility)
       lastVisibility = visibility
