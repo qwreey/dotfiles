@@ -1,0 +1,191 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* Move Find Bar above the page*/
+.browserContainer > findbar {
+  -moz-box-ordinal-group: 0;
+}
+
+/*
+   Hide Extension Name in the identity area unless
+   hovered for half a second (updated for Fx80)
+*/
+#identity-box.extensionPage #identity-icon-labels,
+#identity-box.extensionPage #identity-icon-label {
+  visibility: collapse !important;
+  transition: visibility 250ms ease-in-out;
+}
+#identity-box.extensionPage:hover #identity-icon-labels,
+#identity-box.extensionPage:hover #identity-icon-label {
+  visibility: visible !important;
+  transition: visibility 250ms ease-in-out 500ms;
+}
+
+/* Credits to https://github.com/MrOtherGuy for hthe following snippet*/
+
+/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/autohide_sidebar.css made available under Mozilla Public License v. 2.0
+See the above repository for updates as well as full license text. */
+
+/* Show sidebar only when the cursor is over it */
+/* The border controlling sidebar width will be removed so you'll need to modify these values to change width */
+
+
+/* hides the sidebar header */
+#sidebar-header {
+	display: none !important;
+}
+
+/* remove default tabs */
+#TabsToolbar > *:not(.titlebar-buttonbox-container) { /* remove all and keep only buttons*/
+	display: none !important;
+}
+.titlebar-buttonbox {
+	height: 40px !important;
+}
+#navigator-toolbox { /* parent */
+	position: relative !important;
+}
+#TabsToolbar { /* child (tabs) */
+	position: absolute !important;
+}
+
+/* transparent topbar */
+#nav-bar {
+	background: transparent !important;
+	margin-right: 132px !important;
+	margin-top: -var(--urlbar-container-height) !important;
+}
+
+/* move window buttons */
+#navigator-toolbox #titlebar {
+  position: absolute;
+	width: 100% !important;
+	height: 100% !important;
+	display: flex !important;
+  justify-content: end !important;
+}
+#navigator-toolbox #TabsToolbar {
+	width: 100% !important;
+	height: 100% !important;
+	display: flex !important;
+  justify-content: end !important;
+}
+
+/* window button color */
+.titlebar-buttonbox toolbarbutton {
+	color: var(--lwt-tab-line-color) !important;
+}
+
+/* urlbar height/width */
+#urlbar-container #urlbar {
+/* 	height: 35px !important; */
+	--urlbar-height: 35px !important;
+  --urlbar-margin-inline: 80px !important;
+	--urlbar-container-padding: 0px !important;
+}
+#urlbar-container #urlbar[breakout][breakout-extend] {
+	margin-top: 3px !important;
+	transition: margin-top 100ms var(--animation-easing-function);
+	left: 16px !important;
+}
+#urlbar[breakout][breakout-extend] > #urlbar-input-container {
+  padding-inline: 4px !important;
+}
+@media only screen and (max-width: 565px) {
+	#urlbar-container #urlbar[breakout][breakout-extend] {
+	  left: -20px !important;
+	}
+}
+
+/* adjust extension button height, margin */
+.unified-extensions-item toolbarbutton {
+	height: 100% !important;
+}
+#nav-bar-customization-target>toolbaritem.unified-extensions-item {
+		margin: 0 !important;
+	}
+
+/* adjust items for sizes */
+@media only screen and (max-width: 650px) {
+  /* 리로드 버턴 */
+	#stop-reload-button {
+		display: none !important;
+	}
+}
+@media only screen and (max-width: 700px) {
+  /* 트래킹 보호, ssl 아이덴티티 박스 */
+	#tracking-protection-icon-container,#identity-icon-box {
+		display: none !important;
+	}
+}
+@media only screen and (max-width: 745px) {
+  /* 줌버튼 */
+	#urlbar-zoom-button {
+		display: none !important;
+	}
+}
+@media only screen and (max-width: 615px) {
+  /* urlbar 최소크기 */
+	#nav-bar #urlbar-container {
+    width: calc(152px + 24px + 2 * var(--toolbarbutton-inner-padding)) !important;
+	}
+}
+@media only screen and (max-width: 475px) {
+  /* 넘친 버튼 컨테이너 */
+	#nav-bar-overflow-button {
+		display: none !important;
+	}
+}
+@media (max-width: 565px) {
+	/* 버튼 크기조정 */
+	#nav-bar-customization-target>toolbaritem.unified-extensions-item>toolbarbutton,#PanelUI-button>toolbarbutton,#TabsToolbar toolbarbutton,#nav-bar-customization-target>toolbarbutton,#nav-bar>toolbarbutton {
+		padding: 0 !important;
+		width: 30px !important;
+		min-width: 30px !important;
+		--toolbarbutton-inner-padding: 4px !important;
+	}
+	#nav-bar {
+		margin-right: 90px !important;
+	}
+	#back-button {
+		margin-left: 4px !important;
+	}
+	toolbarspring { display: none !important; }
+}
+
+/* sidebar size when not focused */
+#sidebar-box { /* parent */
+	--uc-sidebar-width: 40px; /* Only thing I (gale) changed */
+	--uc-sidebar-hover-width: 240px;
+	--uc-autohide-sidebar-delay: 140ms; /* Wait 0.6s before hiding sidebar */
+	position: relative;
+	min-width: var(--uc-sidebar-width) !important;
+	width: var(--uc-sidebar-width) !important;
+	max-width: var(--uc-sidebar-width) !important;
+	z-index: 1;
+}
+#sidebar { /* child */
+	transition: min-width 215ms cubic-bezier(0.23, 1, 0.320, 1) var(--uc-autohide-sidebar-delay) !important;
+	min-width: var(--uc-sidebar-width) !important;
+	will-change: min-width;
+	
+  /* Border */
+	border-inline: 1px solid #1E1E2E;
+	border-inline-width: 0px 1px;
+}
+
+/* sidebar size when focused */
+#sidebar-box:hover > #sidebar {
+	min-width: var(--uc-sidebar-hover-width) !important;
+	transition-delay: 0ms !important;
+}
+
+/* sidebar resizer */
+#sidebar-splitter {
+	display: none;
+}
+
+/* hide when fullscreen */
+[inFullscreen] #sidebar {
+	--uc-sidebar-width: 1px !important;
+	display: none !important;
+}
