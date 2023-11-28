@@ -1,0 +1,4 @@
+/* remote user: /@name@instance , local user: /@name */
+div:has(> article):has(.ti-eye-exclamation):has([href="/@mention"]+.ti-repeat) {
+  display: none;
+}
