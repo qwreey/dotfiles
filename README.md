@@ -20,3 +20,8 @@ A pyenv, nvm, rustup included shell environment for cygwin(msys2) and linux. pro
 ## Gnome (45~)
 
 Personally monkey-patched feature enchanted gnome shell extension. project moved to [qwreey/gnome-essential](https://github.com/qwreey/gnome-essential)
+
+
+## discord
+
+No longer maintained, i don't customize my discord. For now, just linux screen share patch only (necessary only)
