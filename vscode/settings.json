@@ -15,7 +15,7 @@
 	"editor.fontSize": 19, // 에디터 폰트 크기
 	"editor.lineHeight": 1.28, // 에디터 폰트 높이
 	"terminal.integrated.fontFamily": "'KawaiiMono'", // 터미널 폰트
-	"terminal.integrated.fontSize": 19, // 터미널 폰트 크기
+	"terminal.integrated.fontSize": 18, // 터미널 폰트 크기
 	"terminal.integrated.lineHeight": 1, // 터미널 폰트 높이
 	// #endregion Font
 
