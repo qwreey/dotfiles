@@ -1,23 +1,33 @@
-@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
-
-
-/* Credits to https://github.com/MrOtherGuy for hthe following snippet*/
-
-/* Source file https://github.com/MrOtherGuy/firefox-csshacks/tree/master/chrome/autohide_sidebar.css made available under Mozilla Public License v. 2.0
-See the above repository for updates as well as full license text. */
-
-/* Show sidebar only when the cursor is over it */
-/* The border controlling sidebar width will be removed so you'll need to modify these values to change width */
-
-
-/* hides the sidebar header */
+/* 사이드바 해더 숨기기 */
 #sidebar-header {
 	display: none !important;
 }
 
-/* remove default tabs */
-#TabsToolbar > *:not(.titlebar-buttonbox-container) { /* remove all and keep only buttons*/
+/* 기본 탭들 숨기기 */
+#TabsToolbar > *:not(.titlebar-buttonbox-container) {
 	display: none !important;
+}
+
+/* URL 바 열었을 때 더 크게 */
+#urlbar-container>#urlbar {
+	--urlbar-height: 35px !important;
+	--urlbar-container-padding: 0px !important;
+	@media only screen and (min-width: 660px) {
+		--urlbar-margin-inline: 80px !important;
+	}
+}
+
+/* 탭바 배경을 타이틀바 배경으로 사용 */
+#nav-bar {
+	background: transparent !important;
+	margin-right: 72px !important;
+	border-top: none !important;
+}
+
+/* window button to right */
+.titlebar-buttonbox-container {
+	position: absolute !important;
+	right: 0px !important;
 }
 .titlebar-buttonbox {
 	height: 40px !important;
@@ -27,13 +37,6 @@ See the above repository for updates as well as full license text. */
 }
 #TabsToolbar { /* child (tabs) */
 	position: absolute !important;
-}
-
-/* transparent topbar */
-#nav-bar {
-	background: transparent !important;
-	margin-left: 76px !important;
-	margin-top: -var(--urlbar-container-height) !important;
 }
 
 /* adjust items for sizes */
@@ -47,12 +50,17 @@ See the above repository for updates as well as full license text. */
 		display: none !important;
 	}
 	#urlbar-container {
-		margin-left: 10px !important;;
+		margin-left: 10px !important;
 	}
+}
+#urlbar-container {
+	margin-left: 4px !important;
 }
 
 /* sidebar size when not focused */
 #sidebar-box { /* parent */
+	overflow: visible;
+  z-index: 1000 !important;
 	--uc-sidebar-width: 40px; /* Only thing I (gale) changed */
 	--uc-sidebar-hover-width: 240px;
 	--uc-autohide-sidebar-delay: 140ms; /* Wait 0.6s before hiding sidebar */
@@ -72,19 +80,24 @@ See the above repository for updates as well as full license text. */
 	border-inline-width: 0px 1px;
 }
 
-/* sidebar size when focused */
+/* 호버시 사이즈 키우기 */
 #sidebar-box:hover > #sidebar {
 	min-width: var(--uc-sidebar-hover-width) !important;
 	transition-delay: 0ms !important;
 }
 
-/* sidebar resizer */
 #sidebar-splitter {
+	/* 사이드바 리사이저 지우기 */
 	display: none;
 }
 
-/* hide when fullscreen */
-[inFullscreen] #sidebar {
-	--uc-sidebar-width: 1px !important;
-	display: none !important;
+/* 풀스크린 상태에서 사이드바 축소 (1픽셀로 표현) */
+:root[inFullscreen] #sidebar-box {
+	--uc-sidebar-width: 1px;
+	opacity: 0;
+	transition: opacity 215ms linear var(--uc-autohide-sidebar-delay);
+	&:hover{
+		transition: none;
+  	opacity: 1;
+	}
 }
