@@ -1,0 +1,201 @@
+/* 루트 변수 */
+:root {
+	/* min and max width */
+	--size-max: 239px;
+	--size-min: 40px;
+}
+
+/* #region 애니메이션 정의 */
+@keyframes fadein {
+	from {
+		opacity: 0.7;
+	}
+	to {
+		opacity: 1;
+	}
+}
+/* #endregion 애니메이션 정의 */
+
+/* 전체 크기가 유지되도록 하여 리렌더 최소화 */
+#root_container, body {
+	width: var(--size-max);
+	overflow-x: hidden;
+}
+
+/* #region 상단 네비게이션바 아이템 */
+#nav_bar {
+	transition: background-color 120ms linear;
+	@media (max-width: 40px) { /* 완전 최소화됨 */
+		/* 아이템이 중간에 오도록 padding 조절 */
+		padding-left: calc( ( var(--size-min) - var(--nav-btn-width) ) / 2 );
+	}
+}
+#nav_bar>.main-items>* {
+	@media (max-width: 40px) {
+		/* 닫은 상태에서 액티브 된 패널이 맨 앞에 오도록 */
+		order: 2;
+		&[data-active="true"] {
+			order: 1;
+			animation: fadein linear 120ms;
+		}
+	}	
+	@media (max-width: 120px) {
+		/* 닫는 중에 액티브된 패널 빼고 투명하게 */
+		&:not([data-active="true"]) {
+			opacity: 0;
+		}
+	}
+}
+/* #endregion 상단 네비게이션바 아이템 */
+
+/* #region 탭 아이템 */
+#root {
+	--tabs-height: 33px;
+	--tabs-indent: 4px;
+	--tabs-font: 0.9rem KawaiiMono;
+	--tabs-margin: 3px;
+}
+.Tab[data-pin="false"] {
+	/* 탭 타이틀 */
+	&>.body>.t-box {
+		padding-left: 3px;
+		padding-top: 1px;
+		transition: opacity 120ms linear;
+		@media (max-width: 120px) {
+			/* 닫은 후 안보이도록 */
+			opacity: 0 !important;
+		}
+	}
+
+	/* 배경 */
+	&>.body {
+		/* 닫을때 기본 액티브탭 배경 날리기 */
+		@media (max-width: 120px) {
+			background-color: transparent !important;
+			box-shadow: none !important;
+		}
+		/* 배경 트렌지션 (열리고 닫히는 중에만 트렌지션을 허용) */
+		@media (max-width: 238px) {
+			transition: background-color 120ms linear;
+		}
+	}
+
+	/* 가짜 정사각형 배경 (액티브탭) */
+	@media (max-width: 238px) {
+		&[data-active="true"]>.body::before {
+			z-index: -1;
+			width: var(--tabs-height);
+			box-shadow: var(--tabs-activated-shadow);
+			background-color: var(--tabs-activated-bg) !important;
+		}
+	}
+
+	/* 인덴트 */
+	@media (max-width: 120px) {
+		--tabs-indent: 0px;
+	}
+}
+/* #endregion 탭 아이템 */
+
+/* #region 핀되어진 탭 */
+#root {
+	--tabs-pinned-height: 33px;
+}
+.PinnedTabsBar>.tab-wrapper {
+	transition: opacity 160ms linear;
+	@media (max-width: 120px) { /* 최소화 중간에 */
+		/* 닫는 중에 액티브된 탭 빼고 투명하게 */
+		opacity: 0;
+	}
+	@media (max-width: 40px) { /* 완전 최소화됨 */
+		/* 닫은 상태에서 액티브 된 탭이 맨 앞에 오도록 */
+		order: 2;
+	}
+}
+/* 맨 앞에 온 탭 */
+.PinnedTabsBar>.tab-wrapper:has(> .Tab[data-active="true"]), /* 액티브탭 */
+.PinnedTabsBar:not(:has(> .tab-wrapper>.Tab[data-active="true"]))>.tab-wrapper:first-child /* 액티브 없는경우 처음탭 */ {
+	@media (max-width: 40px) { /* 완전 최소화됨 */
+		order: 1;
+		animation: fadein linear 120ms;
+		width: var(--tabs-height) !important;
+		margin-right: calc( var(--tabs-pinned-width) - var(--tabs-height) );
+		&>.Tab { width: 100%; }
+	}
+	@media (max-width: 120px) { /* 최소화 중간에 */
+		opacity: 1;
+	}
+}
+/* #endregion 핀되어진 탭 */
+
+/* #region 뉴탭 버튼 */
+.new-tab-btns>* {
+	/* 버튼 페이드 애니메이션 */
+	transition: opacity 160ms linear;
+	@media (max-width: 120px) { /* 최소화 중간에 */
+		/* 최소화시 투명화, 오픈시 페이딩 */
+		opacity: 0;
+		transition: none;
+	}
+	@media (max-width: 40px) { /* 완전 최소화됨 */
+		/* 최소화 되어진후 다시 보여주기 */
+		opacity: 1;
+		animation: fadein linear 120ms;
+	}
+}
+@media (max-width: 40px) { /* 완전 최소화됨 */
+	/* 최소 너비 맞춤 */
+	.new-tab-btns {
+		width: var(--size-min) !important;
+	}
+}
+/* #endregion 뉴탭 버튼 */
+
+/* #region 바텀바 */
+.BottomBar {
+	transition: opacity 160ms linear;
+	@media (max-width: 120px) { /* 최소화 중간에 */
+		/* 최소화시 투명화 */
+		opacity: 0;
+	}
+}
+/* #endregion 바텀바 */
+
+/* #region 색깔 있는 탭 (그룹은 이어지도록) */
+#root {
+	--tabs-activated-color-layer-opacity: var(--tabs-color-layer-opacity);
+}
+.Tab[data-pin="false"] {
+	transition: transform var(--d-fast),opacity var(--d-fast);
+	@media (max-width: 40px) {
+		/* 최소화시 컬러 레이어 너비 맞추기 */
+		&>.body>.color-layer {
+			width: var(--tabs-height);
+		}
+	}
+
+	/* 그룹 최상위 탭 라운드처리 (다음 색깔 객체가 있는경우 이어붙임) */
+	&[data-parent="true"]:has(+ .Tab[data-pin="false"][data-parent="false"] >.body>.color-layer) >.body>.color-layer {
+		--parent-border-radius-left: var(--tabs-border-radius);
+		border-radius: var(--tabs-border-radius) var(--tabs-border-radius) 0 var(--parent-border-radius-left);
+		@media (max-width: 40px) {
+			/* 최소화 상태엔 그룹 최상위 탭 왼쪽 라운드가 0 이 되도록 */
+			--parent-border-radius-left: 0;
+		}
+	}
+
+	/* 자식 탭 이어붙이기 & 라운드처리 */
+	&:has(>.body>.color-layer) + .Tab[data-pin="false"] {
+		/* 위쪽으로 더 있는경우 이어붙이기 */
+		&:not([data-lvl="0"])[data-parent="false"] >.body>.color-layer {
+			margin-top: calc( var(--tabs-margin) * -1 );
+			height: calc( 100% + var(--tabs-margin) );
+			border-radius: 0 0 var(--tabs-border-radius) var(--tabs-border-radius);
+		}
+		/* 아래쪽에 더 있는 경우 이어붙이기 */
+		&:has(+ .Tab[data-pin="false"][data-parent="false"] >.body>.color-layer) >.body>.color-layer {
+			border-radius: 0 0 0 0;
+		}
+	}
+}
+/* #endregion 색깔 있는 탭 (그룹은 이어지도록) */
