@@ -1,6 +1,11 @@
 :root {
-	--q-sidebar-width: 40px;
-	--q-sidebar-active-width: 240px;
+	/* 타이틀바 시스템 버튼 영역 크기 */
+	--q-titlebar-buttonbox-width: 72px;
+	--q-titlebar-buttonbox-height: 40px;
+	
+	/* 사이드바 설정 */
+	--q-sidebar-width: 40px; /* 사이드바가 닫혀 있을 때 크기 */
+	--q-sidebar-active-width: 240px; /* 사이드바가 열려 있을 때 크기 */
 	--q-sidebar-hide-delay: 140ms;
 	--q-sidebar-hide-time: 195ms;
 	--q-sidebar-hide-ease: cubic-bezier(0.23, 1, 0.320, 1);
@@ -26,17 +31,17 @@
 /* 탭바 배경을 타이틀바 배경으로 사용 */
 #nav-bar {
 	background: transparent !important;
-	margin-right: 72px !important;
+	margin-right: var(--q-titlebar-buttonbox-width) !important;
 	border-top: none !important;
 }
 
-/* window button to right */
+/* 창 컨트롤 버튼을 오른쪽으로 이동 */
 .titlebar-buttonbox-container {
 	position: absolute !important;
 	right: 0px !important;
 }
 .titlebar-buttonbox {
-	height: 40px !important;
+	height: var(--q-titlebar-buttonbox-height) !important;
 }
 #navigator-toolbox { /* parent */
 	position: relative !important;
