@@ -1,9 +1,15 @@
-/* 사이드바 해더 숨기기 */
-#sidebar-header {
-	display: none !important;
+:root {
+	--q-sidebar-width: 40px;
+	--q-sidebar-active-width: 240px;
+	--q-sidebar-hide-delay: 140ms;
+	--q-sidebar-hide-time: 195ms;
+	--q-sidebar-hide-ease: cubic-bezier(0.23, 1, 0.320, 1);
+	--q-sidebar-open-time: 215ms;
+	--q-sidebar-open-ease: cubic-bezier(0.23, 1, 0.320, 1);
+	--q-sidebar-open-delay: 0ms;
 }
 
-/* 기본 탭들 숨기기 */
+/* 기본 탭 바 숨기기 */
 #TabsToolbar > *:not(.titlebar-buttonbox-container) {
 	display: none !important;
 }
@@ -57,47 +63,52 @@
 	margin-left: 4px !important;
 }
 
-/* sidebar size when not focused */
-#sidebar-box { /* parent */
+/* 사이드바 해더, 리사이저 숨기기 */
+#sidebar-splitter, #sidebar-header {
+	display: none !important;
+}
+
+/* 사이드바 자식 내용이 넘처 흐를 수 있게합니다 */
+#sidebar-box {
 	overflow: visible;
   z-index: 1000 !important;
-	--uc-sidebar-width: 40px; /* Only thing I (gale) changed */
-	--uc-sidebar-hover-width: 240px;
-	--uc-autohide-sidebar-delay: 140ms; /* Wait 0.6s before hiding sidebar */
 	position: relative;
-	min-width: var(--uc-sidebar-width) !important;
-	width: var(--uc-sidebar-width) !important;
-	max-width: var(--uc-sidebar-width) !important;
-	z-index: 1;
-}
-#sidebar { /* child */
-	transition: min-width 215ms cubic-bezier(0.23, 1, 0.320, 1) var(--uc-autohide-sidebar-delay) !important;
-	min-width: var(--uc-sidebar-width) !important;
-	will-change: min-width;
-	
-  /* Border */
-	border-inline: 1px solid ThreeDShadow;
-	border-inline-width: 0px 1px;
 }
 
-/* 호버시 사이즈 키우기 */
-#sidebar-box:hover > #sidebar {
-	min-width: var(--uc-sidebar-hover-width) !important;
-	transition-delay: 0ms !important;
+/* 사이드바 호버 영역 크기 조절 */
+#sidebar-box {
+  width: var(--q-sidebar-width) !important;
+	max-width: var(--q-sidebar-width) !important;
+	min-width: var(--q-sidebar-width) !important;
 }
-
-#sidebar-splitter {
-	/* 사이드바 리사이저 지우기 */
-	display: none;
-}
-
-/* 풀스크린 상태에서 사이드바 축소 (1픽셀로 표현) */
 :root[inFullscreen] #sidebar-box {
-	--uc-sidebar-width: 1px;
-	opacity: 0;
-	transition: opacity 215ms linear var(--uc-autohide-sidebar-delay);
-	&:hover{
-		transition: none;
-  	opacity: 1;
-	}
+	width: 1px !important;
+	max-width: 1px !important;
+	min-width: 1px !important;
+}
+
+/* 사이드바 내부 브라우저를 클립하여 트랜지셔닝합니다. */
+#sidebar-box {
+	clip-path: rect(0px var(--q-sidebar-width) 100% 0px);
+	transition: clip-path var(--q-sidebar-hide-time) var(--q-sidebar-hide-ease) var(--q-sidebar-hide-delay) !important;
+}
+:root[inFullscreen] #sidebar-box {
+	clip-path: rect(0px 1px 100% 0px);
+}
+#sidebar-box:hover, :root[inFullscreen] #sidebar-box:hover {
+	clip-path: rect(0px var(--q-sidebar-active-width) 100% 0px);
+	transition: clip-path var(--q-sidebar-open-time) var(--q-sidebar-open-ease) var(--q-sidebar-open-delay) !important;
+}
+
+/* 사이드바 내부 브라우저의 실제 크기를 조절합니다 */
+#sidebar-box #sidebar {
+	transition: width 0s linear calc(var(--q-sidebar-hide-time) + var(--q-sidebar-hide-delay));
+	width: var(--q-sidebar-width) !important;
+}
+:root[inFullscreen] #sidebar-box #sidebar {
+	width: 1px !important;
+}
+#sidebar-box:hover #sidebar, :root[inFullscreen] #sidebar-box:hover #sidebar {
+	transition: width 0s linear 0s;
+	width: var(--q-sidebar-active-width) !important;
 }
