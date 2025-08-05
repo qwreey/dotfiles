@@ -5,17 +5,43 @@
 	
 	/* 사이드바 설정 */
 	--q-sidebar-width: 40px; /* 사이드바가 닫혀 있을 때 크기 */
-	--q-sidebar-active-width: 240px; /* 사이드바가 열려 있을 때 크기 */
-	--q-sidebar-hide-delay: 140ms;
-	--q-sidebar-hide-time: 195ms;
+	--q-sidebar-active-width: 280px; /* 사이드바가 열려 있을 때 크기 */
+	--q-sidebar-hide-delay: 180ms;
+	--q-sidebar-hide-time: 190ms;
 	--q-sidebar-hide-ease: cubic-bezier(0.23, 1, 0.320, 1);
 	--q-sidebar-open-time: 215ms;
 	--q-sidebar-open-ease: cubic-bezier(0.23, 1, 0.320, 1);
 	--q-sidebar-open-delay: 0ms;
+	--q-sidebar-expanded-menu-width: 36px;
+	
+  /* 창 최소 크기 */
+	--q-min-window-width: 460px;
+	--q-min-window-height: 280px;
 }
 
-/* 기본 탭 바 숨기기 */
-#TabsToolbar > *:not(.titlebar-buttonbox-container) {
+/* 창 최소 크기 변경 */
+html#main-window {
+	min-width: var(--q-min-window-width) !important;
+	min-height: var(--q-min-window-height) !important;
+}
+
+/* 기본 버티컬 탭 바 숨기기 */
+:root:not(:has(#sidebar-button[checked="true"])) #sidebar-main {
+	display: none !important;
+}
+#sidebar-main {
+	width: var(--q-sidebar-expanded-menu-width) !important;
+	max-width: var(--q-sidebar-expanded-menu-width) !important;
+	min-width: var(--q-sidebar-expanded-menu-width) !important;
+}
+button-group.tools-and-extensions.actions-list {
+	padding-inline: var(--toolbarbutton-outer-padding) !important;
+  padding-block-end: var(--toolbarbutton-outer-padding) !important;
+	--button-border-radius: var(--toolbarbutton-border-radius);
+}
+#sidebar-tools-and-extensions-splitter,
+#sidebar-launcher-splitter,
+#vertical-tabs {
 	display: none !important;
 }
 
@@ -28,36 +54,14 @@
 	}
 }
 
-/* 탭바 배경을 타이틀바 배경으로 사용 */
-#nav-bar {
-	background: transparent !important;
-	margin-right: var(--q-titlebar-buttonbox-width) !important;
-	border-top: none !important;
-}
-
-/* 창 컨트롤 버튼을 오른쪽으로 이동 */
-.titlebar-buttonbox-container {
-	position: absolute !important;
-	right: 0px !important;
-}
-.titlebar-buttonbox {
-	height: var(--q-titlebar-buttonbox-height) !important;
-}
-#navigator-toolbox { /* parent */
-	position: relative !important;
-}
-#TabsToolbar { /* child (tabs) */
-	position: absolute !important;
-}
-
-/* adjust items for sizes */
+/* 툴바 요소 화면 작으면 숨기기 */
 @media only screen and (max-width: 590px) {
 	#stop-reload-button {
 		display: none !important;
 	}
 }
 @media only screen and (max-width: 490px) {
-	#back-button, #forward-button {
+	#back-button, #forward-button, #sidebar-button {
 		display: none !important;
 	}
 	#urlbar-container {
@@ -69,51 +73,86 @@
 }
 
 /* 사이드바 해더, 리사이저 숨기기 */
-#sidebar-splitter, #sidebar-header {
+#sidebar-splitter, #sidebar-header, #sidebar-panel-header {
 	display: none !important;
 }
 
-/* 사이드바 자식 내용이 넘처 흐를 수 있게합니다 */
+/* 수직 사이드바의 스타일링을 제거합니다 */
+#sidebar {
+	box-shadow: none !important;
+  border-radius: 0 !important;
+  outline: none !important;
+}
 #sidebar-box {
-	overflow: visible;
-  z-index: 1000 !important;
-	position: relative;
+	padding-inline-end: 0 !important;
+	padding-block-end: 0 !important;
 }
 
-/* 사이드바 호버 영역 크기 조절 */
-#sidebar-box {
-  width: var(--q-sidebar-width) !important;
-	max-width: var(--q-sidebar-width) !important;
-	min-width: var(--q-sidebar-width) !important;
-}
+/* 전채 화면일 때 사이드바 숨김*/
 :root[inFullscreen] #sidebar-box {
 	width: 1px !important;
 	max-width: 1px !important;
 	min-width: 1px !important;
 }
 
-/* 사이드바 내부 브라우저를 클립하여 트랜지셔닝합니다. */
-#sidebar-box {
-	clip-path: rect(0px var(--q-sidebar-width) 100% 0px);
-	transition: clip-path var(--q-sidebar-hide-time) var(--q-sidebar-hide-ease) var(--q-sidebar-hide-delay) !important;
-}
-:root[inFullscreen] #sidebar-box {
-	clip-path: rect(0px 1px 100% 0px);
-}
-#sidebar-box:hover, :root[inFullscreen] #sidebar-box:hover {
-	clip-path: rect(0px var(--q-sidebar-active-width) 100% 0px);
-	transition: clip-path var(--q-sidebar-open-time) var(--q-sidebar-open-ease) var(--q-sidebar-open-delay) !important;
-}
-
-/* 사이드바 내부 브라우저의 실제 크기를 조절합니다 */
-#sidebar-box #sidebar {
-	transition: width 0s linear calc(var(--q-sidebar-hide-time) + var(--q-sidebar-hide-delay));
-	width: var(--q-sidebar-width) !important;
-}
-:root[inFullscreen] #sidebar-box #sidebar {
-	width: 1px !important;
-}
-#sidebar-box:hover #sidebar, :root[inFullscreen] #sidebar-box:hover #sidebar {
-	transition: width 0s linear 0s;
+/* 비 익스텐션 패널의 크기를 일치시킵니다 */
+#sidebar-box:has(#sidebar:not(#sidebar[src="chrome://browser/content/webext-panels.xhtml"])) {
 	width: var(--q-sidebar-active-width) !important;
 }
+
+/* 익스텐션 패널에 한하여 호버링 액션을 수행합니다 */
+#sidebar-box:has(#sidebar[src="chrome://browser/content/webext-panels.xhtml"]) {
+	/* 사이드바 자식 내용이 넘처 흐를 수 있게합니다 */
+	overflow: visible;
+  z-index: 1000 !important;
+	position: relative;
+
+  /* 사이드바 호버 영역 크기 조절 */
+  width: var(--q-sidebar-width) !important;
+	max-width: var(--q-sidebar-width) !important;
+	min-width: var(--q-sidebar-width) !important;
+	
+	/* 사이드바 내부 브라우저를 클립하여 트랜지셔닝합니다. */
+	clip-path: rect(0px var(--q-sidebar-width) 100% 0px);
+	transition: clip-path var(--q-sidebar-hide-time) var(--q-sidebar-hide-ease) var(--q-sidebar-hide-delay) !important;
+	&:is(:root[inFullscreen] #sidebar-box) {
+	  clip-path: rect(0px 1px 100% 0px);
+	}
+	&:hover,
+	&:is(:root[inFullscreen] #sidebar-box):hover {
+		clip-path: rect(0px var(--q-sidebar-active-width) 100% 0px);
+	  transition: clip-path var(--q-sidebar-open-time) var(--q-sidebar-open-ease) var(--q-sidebar-open-delay) !important;
+	}
+	&:is(:root:not([inFullscreen]):has(#sidebar-button[checked="true"]) #sidebar-box) {
+		/* 사이드바 버튼 눌림 상태 */
+		width: var(--q-sidebar-active-width) !important;
+		max-width: var(--q-sidebar-active-width) !important;
+		min-width: var(--q-sidebar-active-width) !important;
+		clip-path: rect(0px var(--q-sidebar-active-width) 100% 0px);
+		transition: none !important;
+	}
+	
+	/* 사이드바 내부 브라우저의 실제 크기를 조절합니다 */
+	& #sidebar {
+		transition: width 0s linear calc(var(--q-sidebar-hide-time) + var(--q-sidebar-hide-delay));
+		width: var(--q-sidebar-width) !important;
+	}
+	&:is(:root[inFullscreen] #sidebar-box) #sidebar {
+		width: 1px !important;
+	}
+	&:hover #sidebar, &:is(:root[inFullscreen] #sidebar-box):hover #sidebar {
+		transition: width 0s linear 0s;
+		width: var(--q-sidebar-active-width) !important;
+	}
+	&:is(:root:not([inFullscreen]):has(#sidebar-button[checked="true"]) #sidebar-box) #sidebar {
+		/* 사이드바 버튼 눌림 상태 */
+		width: var(--q-sidebar-active-width) !important;
+		transition: width 0s linear 0s;
+	}
+}
+
+/* Markdown new tab, Sidebery 표시 숨기기 */
+#identity-icon-box:has([value="Extension (Markdown New Tab)"]),
+#identity-icon-box:has([value="Extension (Tabliss)"]),
+#identity-icon-box:has([value="Extension (Sidebery)"])
+{ display: none; }
