@@ -68,10 +68,23 @@
   @media (max-width: 40px) {
     /* 닫을 때 오디오 위치 변경 */
     &>.body>.audio {
-      top: -25%;
+      top: -24%;
       transform: scale(0.95);
       left: calc(10px + var(--tabs-inner-gap));
       animation: fadein linear 320ms;
+      /* 배경 원 */
+      &::after {
+        border-radius: 8px;
+        background: var(--frame-bg);
+        content: "";
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        z-index: -1;
+      }
     }
 
     /* 닫을때 기본 액티브탭 배경 날리기 */
