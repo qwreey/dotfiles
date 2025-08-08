@@ -14,7 +14,7 @@
 	--q-sidebar-open-delay: 0ms;
 	--q-sidebar-expanded-menu-width: 36px;
 	
-  /* 창 최소 크기 */
+	/* 창 최소 크기 */
 	--q-min-window-width: 460px;
 	--q-min-window-height: 280px;
 }
@@ -36,7 +36,7 @@ html#main-window {
 }
 button-group.tools-and-extensions.actions-list {
 	padding-inline: var(--toolbarbutton-outer-padding) !important;
-  padding-block-end: var(--toolbarbutton-outer-padding) !important;
+	padding-block-end: var(--toolbarbutton-outer-padding) !important;
 	--button-border-radius: var(--toolbarbutton-border-radius);
 }
 #sidebar-tools-and-extensions-splitter,
@@ -55,17 +55,65 @@ button-group.tools-and-extensions.actions-list {
 }
 
 /* 툴바 요소 화면 작으면 숨기기 */
-@media only screen and (max-width: 590px) {
-	#stop-reload-button {
-		display: none !important;
+@media (-moz-platform: windows) {
+	@media only screen and (max-width: 720px) {
+		/* 리로드 버턴 */
+		#stop-reload-button {
+			display: none !important;
+		}
+		/* 트래킹 보호, ssl 아이덴티티 박스 */
+		#tracking-protection-icon-container,#identity-icon-box {
+			display: none !important;
+		}
+		/* URL 바 내부 줌버튼 */
+		#urlbar-zoom-button {
+			display: none !important;
+		}
+		/* 시스템 버튼 크기조절 */
+		.titlebar-buttonbox>* {
+			padding-left: 12px !important;
+			padding-right: 12px !important;
+		}
+		/* urlbar 최소크기 */
+		#nav-bar #urlbar-container {
+			width: calc(90px + 24px + 2 * var(--toolbarbutton-inner-padding)) !important;
+		}
+	}
+	@media (max-width: 565px) {
+		/* 버튼 크기조정 */
+		#nav-bar-customization-target>toolbaritem.unified-extensions-item>toolbarbutton,#PanelUI-button>toolbarbutton,#TabsToolbar toolbarbutton,#nav-bar-customization-target>toolbarbutton,#nav-bar>toolbarbutton {
+			padding: 0 !important;
+			width: 30px !important;
+			min-width: 30px !important;
+			--toolbarbutton-inner-padding: 4px !important;
+		}
+		#back-button {
+			margin-left: 4px !important;
+		}
+		toolbarspring { display: none !important; }
+	}
+	@media only screen and (max-width: 490px) {
+		#back-button, #forward-button, #sidebar-button {
+			display: none !important;
+		}
+		#urlbar-container {
+			margin-left: 10px !important;
+		}
 	}
 }
-@media only screen and (max-width: 490px) {
-	#back-button, #forward-button, #sidebar-button {
-		display: none !important;
+@media (-moz-platform: linux) {
+	@media only screen and (max-width: 490px) {
+		#back-button, #forward-button, #sidebar-button {
+			display: none !important;
+		}
+		#urlbar-container {
+			margin-left: 10px !important;
+		}
 	}
-	#urlbar-container {
-		margin-left: 10px !important;
+	@media only screen and (max-width: 590px) {
+		#stop-reload-button {
+			display: none !important;
+		}
 	}
 }
 #urlbar-container {
@@ -80,8 +128,8 @@ button-group.tools-and-extensions.actions-list {
 /* 수직 사이드바의 스타일링을 제거합니다 */
 #sidebar {
 	box-shadow: none !important;
-  border-radius: 0 !important;
-  outline: none !important;
+	border-radius: 0 !important;
+	outline: none !important;
 }
 #sidebar-box {
 	padding-inline-end: 0 !important;
@@ -104,7 +152,7 @@ button-group.tools-and-extensions.actions-list {
 #sidebar-box:has(#sidebar[src="chrome://browser/content/webext-panels.xhtml"]) {
 	/* 사이드바 자식 내용이 넘처 흐를 수 있게합니다 */
 	overflow: visible;
-  z-index: 1000 !important;
+	z-index: 1000 !important;
 	position: relative;
 
   /* 사이드바 호버 영역 크기 조절 */
@@ -121,7 +169,7 @@ button-group.tools-and-extensions.actions-list {
 	&:hover,
 	&:is(:root[inFullscreen] #sidebar-box):hover {
 		clip-path: rect(0px var(--q-sidebar-active-width) 100% 0px);
-	  transition: clip-path var(--q-sidebar-open-time) var(--q-sidebar-open-ease) var(--q-sidebar-open-delay) !important;
+		transition: clip-path var(--q-sidebar-open-time) var(--q-sidebar-open-ease) var(--q-sidebar-open-delay) !important;
 	}
 	&:is(:root:not([inFullscreen]):has(#sidebar-button[checked="true"]) #sidebar-box) {
 		/* 사이드바 버튼 눌림 상태 */
