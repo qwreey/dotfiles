@@ -34,10 +34,14 @@ html#main-window {
 	max-width: var(--q-sidebar-expanded-menu-width) !important;
 	min-width: var(--q-sidebar-expanded-menu-width) !important;
 }
-button-group.tools-and-extensions.actions-list {
-	padding-inline: var(--toolbarbutton-outer-padding) !important;
-	padding-block-end: var(--toolbarbutton-outer-padding) !important;
-	--button-border-radius: var(--toolbarbutton-border-radius);
+.buttons-wrapper:has(.tools-and-extensions.actions-list) {
+	flex-direction: column !important;
+	& button-group {
+		flex-wrap: wrap-reverse !important;
+		padding-inline: var(--toolbarbutton-outer-padding) !important;
+		padding-block-end: var(--toolbarbutton-outer-padding) !important;
+		--button-border-radius: var(--toolbarbutton-border-radius);
+	}
 }
 #sidebar-tools-and-extensions-splitter,
 #sidebar-launcher-splitter,
