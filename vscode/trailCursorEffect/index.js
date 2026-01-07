@@ -80,38 +80,41 @@ function createTrail(options) {
 
       particlePos.x = x;
       particlePos.y = y;
-      
+
       x += (nextParticlePos.x - particlePos.x) * 0.42
       y += (nextParticlePos.y - particlePos.y) * 0.35
     }
   }
 
-  // for block cursor
-  function drawLines() {
+  //Renders a solid polygon for 'block' style
+  function drawBlocks() {
     context.beginPath()
     context.lineJoin = "round"
+    context.lineCap = "round"
     context.strokeStyle = particlesColor
-    const lineWidth = Math.min(sizeX,sizeY)
-    context.lineWidth = lineWidth
+    context.fillStyle = particlesColor
+    context.lineWidth = 2 // Thin border for the path
 
     if (UseShadow) {
       context.shadowColor = ShadowColor;
       context.shadowBlur = ShadowBlur;
     }
 
-    // draw 3 lines
-    let ymut = (sizeY-lineWidth)/3
-    for (let yoffset=0;yoffset<=3;yoffset++) {
-      let offset = yoffset*ymut
-      for (const particleIndex in particles) {
-        const pos = particles[particleIndex].position
-        if (particleIndex == 0) {
-          context.moveTo(pos.x, pos.y + offset + lineWidth/2)
-        } else {
-          context.lineTo(pos.x, pos.y + offset + lineWidth/2)
-        }
-      }
+    // Trace the top edge of the block
+    for (let i = 0; i < particles.length; i++) {
+      const pos = particles[i].position
+      if (i === 0) context.moveTo(pos.x, pos.y)
+      else context.lineTo(pos.x, pos.y)
     }
+
+    // Trace back along the bottom edge to create a filled area
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const pos = particles[i].position
+      context.lineTo(pos.x, pos.y + sizeY)
+    }
+
+    context.closePath()
+    context.fill()
     context.stroke()
   }
 
@@ -164,7 +167,7 @@ function createTrail(options) {
     calculatePosition()
 
     if (style=="line") drawPath()
-    else if (style=="block") drawLines()
+    else if (style=="block") drawBlocks()
   }
 
   function updateCursorSize(newSize,newSizeY) {
@@ -257,7 +260,7 @@ async function createCursorHandler(handlerFunctions) {
       createCursorUpdateHandler(target,thisCursorId,cursorHolder,minimap)
       // console.log("DEBUG-CursorCreated",thisCursorId)
     }
-    
+
     // update visible
     let visibility = count<=1 ? "visible" : "hidden"
     if (visibility != lastVisibility) {
