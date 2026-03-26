@@ -2,7 +2,7 @@
 	/* 타이틀바 시스템 버튼 영역 크기 */
 	--q-titlebar-buttonbox-width: 72px;
 	--q-titlebar-buttonbox-height: 40px;
-	
+
 	/* 사이드바 설정 */
 	--q-sidebar-width: 40px; /* 사이드바가 닫혀 있을 때 크기 */
 	--q-sidebar-active-width: 280px; /* 사이드바가 열려 있을 때 크기 */
@@ -13,7 +13,7 @@
 	--q-sidebar-open-ease: cubic-bezier(0.23, 1, 0.320, 1);
 	--q-sidebar-open-delay: 0ms;
 	--q-sidebar-expanded-menu-width: 36px;
-	
+
 	/* 창 최소 크기 */
 	--q-min-window-width: 460px;
 	--q-min-window-height: 280px;
@@ -26,7 +26,8 @@ html#main-window {
 }
 
 /* 기본 버티컬 탭 바 숨기기 */
-:root:not(:has(#sidebar-button[checked="true"])) #sidebar-main {
+:root:not(:has(#sidebar-button[checked])) #sidebar-main,
+:root[inFullscreen] #sidebar-main {
 	display: none !important;
 }
 #sidebar-main {
@@ -140,16 +141,19 @@ html#main-window {
 	padding-block-end: 0 !important;
 }
 
-/* 전채 화면일 때 사이드바 숨김*/
-:root[inFullscreen] #sidebar-box {
-	width: 1px !important;
-	max-width: 1px !important;
-	min-width: 1px !important;
-}
-
 /* 비 익스텐션 패널의 크기를 일치시킵니다 */
 #sidebar-box:has(#sidebar:not(#sidebar[src="chrome://browser/content/webext-panels.xhtml"])) {
 	width: var(--q-sidebar-active-width) !important;
+}
+
+/* 비주얼적 버그를 최소화하기 위해 애니메이션중 약간의 투명도를 부여합니다 */
+@keyframes overlay-fix {
+	from {opacity: 0.98;}
+	to {opacity: 0.98;}
+}
+@keyframes overlay-fix2 {
+	from {opacity: 0.98;}
+	to {opacity: 0.98;}
 }
 
 /* 익스텐션 패널에 한하여 호버링 액션을 수행합니다 */
@@ -159,31 +163,39 @@ html#main-window {
 	z-index: 1000 !important;
 	position: relative;
 
-  /* 사이드바 호버 영역 크기 조절 */
-  width: var(--q-sidebar-width) !important;
+	/* 사이드바 호버 영역 크기 조절 */
+	width: var(--q-sidebar-width) !important;
 	max-width: var(--q-sidebar-width) !important;
 	min-width: var(--q-sidebar-width) !important;
-	
+
 	/* 사이드바 내부 브라우저를 클립하여 트랜지셔닝합니다. */
 	clip-path: rect(0px var(--q-sidebar-width) 100% 0px);
 	transition: clip-path var(--q-sidebar-hide-time) var(--q-sidebar-hide-ease) var(--q-sidebar-hide-delay) !important;
+	animation: 1s linear 0s 1 normal none running overlay-fix;
 	&:is(:root[inFullscreen] #sidebar-box) {
-	  clip-path: rect(0px 1px 100% 0px);
+		/* 전체 화면에서 호버 영역인 1px 만 남기기 */
+		clip-path: rect(0px 1px 100% 0px);
+		width: 1px !important;
+		max-width: 1px !important;
+		min-width: 1px !important;
 	}
 	&:hover,
 	&:is(:root[inFullscreen] #sidebar-box):hover {
+		/* 호버시 크기 조절 */
 		clip-path: rect(0px var(--q-sidebar-active-width) 100% 0px);
+		animation: 1s linear 0s 1 normal none running overlay-fix2;
 		transition: clip-path var(--q-sidebar-open-time) var(--q-sidebar-open-ease) var(--q-sidebar-open-delay) !important;
 	}
-	&:is(:root:not([inFullscreen]):has(#sidebar-button[checked="true"]) #sidebar-box) {
+	&:is(:root:not([inFullscreen]):has(#sidebar-button[checked]) #sidebar-box) {
 		/* 사이드바 버튼 눌림 상태 */
 		width: var(--q-sidebar-active-width) !important;
 		max-width: var(--q-sidebar-active-width) !important;
 		min-width: var(--q-sidebar-active-width) !important;
+		animation: 1s linear 0s 1 normal none running overlay-fix2;
 		clip-path: rect(0px var(--q-sidebar-active-width) 100% 0px);
 		transition: none !important;
 	}
-	
+
 	/* 사이드바 내부 브라우저의 실제 크기를 조절합니다 */
 	& #sidebar {
 		transition: width 0s linear calc(var(--q-sidebar-hide-time) + var(--q-sidebar-hide-delay));
@@ -196,7 +208,7 @@ html#main-window {
 		transition: width 0s linear 0s;
 		width: var(--q-sidebar-active-width) !important;
 	}
-	&:is(:root:not([inFullscreen]):has(#sidebar-button[checked="true"]) #sidebar-box) #sidebar {
+	&:is(:root:not([inFullscreen]):has(#sidebar-button[checked]) #sidebar-box) #sidebar {
 		/* 사이드바 버튼 눌림 상태 */
 		width: var(--q-sidebar-active-width) !important;
 		transition: width 0s linear 0s;
