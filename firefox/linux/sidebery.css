@@ -27,6 +27,69 @@
 	overflow-x: hidden;
 }
 
+/* 탭 패널 이외의 패널은 접어졌을 때 흐리게 */
+@keyframes background-dim-fadein {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 0.7;
+	}
+}
+.panel[data-pos="center"]:is(.HistoryPanel,.BookmarksPanel) {
+	&::after { @media (max-width: 40px) {
+	  position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		content: "";
+		z-index: 2000;
+		background: var(--frame-bg);
+		opacity: 0.7;
+    animation: background-dim-fadein linear 180ms;
+	} }
+}
+
+/* 다이어로그 접어졌을 때 흐리게 */
+.popup-container>.popup {
+	transition: opacity 260ms linear;
+	@media (max-width: 40px) {
+		opacity: 0;
+		transition: opacity 140ms linear;
+  }
+}
+
+/* 최소화시 검색 영역 숨김 */
+#search_bar {
+	& .placeholder, & .input {
+		opacity: 1;
+		transition: opacity 260ms linear;
+		@media (max-width: 40px) {
+			transition: opacity 140ms linear;
+	    opacity: 0;
+		}
+	}
+  & .search-icon {
+		@media (max-width: 40px) {
+			margin-left: 4px;
+		}
+		& svg {
+			opacity: .6;
+			@media (max-width: 40px) {
+				opacity: 1;
+    		animation: fadein linear 320ms;
+				fill: var(--toolbar-fg);
+			}
+		}
+	}
+	&::before{
+		@media (max-width: 40px) {
+			box-shadow: none !important;
+		}
+	}
+}
+
 /* 상단 네비게이션바 아이템 */
 #nav_bar {
   /* 다른 요소들은 천천히 나타남 */
